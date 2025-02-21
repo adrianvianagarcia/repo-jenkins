@@ -1,5 +1,5 @@
 import './App.css';
-import freeCodeCampLogo from './imagenes/freecodecamp-logo.png';
+import freeCodeCampLogo from './imagenes/freecodecamp-logo.png'; 
 import ListaDeTareas from './componentes/ListaDeTareas';
 
 function App() {
