@@ -1,23 +1,36 @@
 pipeline {
     agent any
+
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                echo 'Copiando los ficheros'
-                sh 'npm install'
-                sh 'npm run build'                
+                echo 'Clonando repositorio desde GitHub...'
+                script {
+                    git branch: 'main', 
+                        credentialsId: 'github-token', // ID de las credenciales almacenadas en Jenkins
+                        url: 'https://github.com/adrianvianagarcia/repo-jenkins.git'
+                }
             }
         }
-        stage('Test') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Testing..'
+                echo 'Instalando dependencias...'
+                sh 'npm install'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Compilando la aplicación React...'
+                sh 'npm run build'
             }
         }
         stage('Deploy') {
             steps {
-		echo 'Desploying...'
-		sh 'cp -r ./build/* /var/www/html/'    
-	    }
+                echo 'Desplegando la aplicación en Apache...'
+                sh 'sudo rm -rf /var/www/html/*'
+                sh 'sudo cp -r build/* /var/www/html/'
+            }
         }
     }
 }
+
